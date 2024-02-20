@@ -21,7 +21,7 @@ webpackJsonp([57], {
             r()(s, c.a.name, c.a),
             r()(s, l.a.name, l.a),
             s),
-            const systemLoginURL = 'https://baiyun.ytsafe.com/login';
+            //const systemLoginURL = 'https://baiyun.ytsafe.com/login';
             data: function() {
                 return {
                     userName: "admin",
