@@ -1,0 +1,430 @@
+webpackJsonp([57], {
+    ENJ5: function(e, t) {},
+    K31e: function(e, t, a) {
+        "use strict";
+        Object.defineProperty(t, "__esModule", {
+            value: !0
+        });
+        var s, n = a("BO1k"), i = a.n(n), o = a("bOdI"), r = a.n(o), l = (a("nOaS"),
+        a("pIDD")), c = (a("UuFX"),
+        a("J1XP")), m = (a("XmAh"),
+        a("il3B")), g = (a("RIEG"),
+        a("zjGD")), u = (a("cZ0s"),
+        a("fIxc")), d = (a("k3b4"),
+        a("+2ln")), f = a("l+Po"), p = a("w8Hz"), h = a("NC6I"), v = a.n(h), w = {
+            name: "login",
+            components: (s = {},
+            r()(s, d.a.name, d.a),
+            r()(s, u.a.name, u.a),
+            r()(s, g.a.name, g.a),
+            r()(s, m.a.name, m.a),
+            r()(s, c.a.name, c.a),
+            r()(s, l.a.name, l.a),
+            s),
+            //const systemLoginURL = 'https://baiyun.ytsafe.com/login';
+            data: function() {
+                return {
+                    userName: "admin",
+                    password: "21232F297A57A5A743894A0E4A801FC3",
+                    showFlag: !1,
+                    remenber: [],
+                    loginFlag: !1,
+                    message: "",
+                    systemTime: "",
+                    contain: !1
+                }
+            },
+            methods: {
+                addDate: function() {
+                    var e = new Date
+                      , t = {
+                        year: e.getFullYear(),
+                        month: e.getMonth() + 1,
+                        date: e.getDate()
+                    }
+                      , a = t.date < 10 ? "0" + t.date : t.date
+                      , s = t.month < 10 ? "0" + t.month : (new Date).getMonth() + 1;
+                    console.log(s),
+                    this.systemTime = t.year.toString() + s.toString() + a.toString(),
+                    console.log(this.systemTime)
+                },
+                remind: function() {
+                    var e = this;
+                    console.log(e.systemTime);
+                    var t = {
+                        url: "/ytsafe/webNews/webnewsInfo.shtml",
+                        data: {
+                            token: v()("ytsafe" + e.systemTime)
+                        }
+                    };
+                    this.$ajax(e, t, function(t) {
+                        e.contain = -1 != t.data.messageType.indexOf("H5"),
+                        e.message = t.data.message
+                    })
+                },
+                loginInfo: function(e) {
+                    for (var t in e)
+                        this.$cookie(t, e[t], {
+                            expires: 30
+                        })
+                },
+                login: function() {
+                    var e = this;
+                    if ("" == this.userName)
+                        m.a.alert({
+                            title: "提示",
+                            message: "请输入用户名"
+                        }).then(function() {
+                            return !1
+                        });
+                    else if ("" == this.password)
+                        m.a.alert({
+                            title: "提示",
+                            message: "请输入密码"
+                        }).then(function() {
+                            return !1
+                        });
+                    else {
+                        e.loginFlag = !0,
+                        0 != e.remenber.length ? (e.$cookie("name", Object(p.b)(Object(f.b)(e.userName.trim()), "1", "2", "3"), {
+                            expires: 30
+                        }),
+                        e.$cookie("pasw", Object(p.b)(Object(f.b)(e.password), "1", "2", "3"), {
+                            expires: 30
+                        })) : (e.$cookie("name", null, {
+                            expires: -1
+                        }),
+                        e.$cookie("pasw", null, {
+                            expires: -1
+                        }));
+                        var t = new Date
+                          , a = t.getFullYear()
+                          , s = t.getMonth() + 1
+                          , n = t.getDate();
+                        s < 10 && (s = "0" + s),
+                        n < 10 && (n = "0" + n);
+                        var i = (a + "-" + s + "-" + n).replace(new RegExp("-","g"), "")
+                          , o = {
+                            url: "/ytsafe/pucEntp/getAreaCode.shtml?token=" + v()("ytsafe" + i),
+                            agent: !0,
+                            data: {
+                                keyName: e.userName.trim()
+                            }
+                        };
+                        this.$ajax(e, o, function(t) {
+                            var a = t.data;
+                            if (t.data) {
+                                if ("failed" == a.areaCode)
+                                    return e.loginFlag = !1,
+                                    m.a.alert({
+                                        title: "系统提示",
+                                        message: "您的用户名或密码输入错误，如忘记密码请点击“忘记密码？”进行密码重置后再进行登录。"
+                                    }),
+                                    !1;
+                                if ("1" == a.deleteFlag)
+                                    return e.loginFlag = !1,
+                                    m.a.alert({
+                                        title: "系统提示",
+                                        message: "您的用户名或密码输入错误，如忘记密码请点击“忘记密码？”进行密码重置后再进行登录。"
+                                    }),
+                                    !1;
+                                e.$cookie("initAreacode", a.areaCode, {
+                                    expires: 30
+                                });
+                                e.$ajax(e, {
+                                    url: "/ytsafe/tooken/tooken.shtml"
+                                }, function(t) {
+                                    if ("success" == t.data.result) {
+                                        var a = {
+                                            url: "/ytsafe/login/login.shtml",
+                                            data: {
+                                                userName: Object(p.b)(Object(f.b)(e.userName.trim()), "1", "2", "3"),
+                                                password: Object(p.b)(Object(f.b)(e.password), "1", "2", "3"),
+                                                tooken: t.data.id,
+                                                loginType: "zhifa"
+                                            }
+                                        };
+                                        e.$ajax(e, a, function(t) {
+                                            if (e.loginFlag = !1,
+                                            "2" == t.data.code)
+                                                m.a.alert({
+                                                    title: "系统提示",
+                                                    message: t.data.message
+                                                });
+                                            else if ("3" == t.data.code)
+                                                m.a.alert({
+                                                    title: "系统提示",
+                                                    messageAlign: "left",
+                                                    message: t.data.message
+                                                });
+                                            else if ("4" == t.data.code)
+                                                m.a.alert({
+                                                    title: "系统提示",
+                                                    message: "您的用户名或密码输入错误，如忘记密码请点击“忘记密码？”进行密码重置后再进行登录。"
+                                                });
+                                            else if ("5" == t.data.code)
+                                                m.a.alert({
+                                                    title: "系统提示",
+                                                    message: t.data.message
+                                                });
+                                            else if ("1" == t.data.qx) {
+                                                e.loginInfo(t.data);
+                                                /^(?=.*[a-z])(?=.*[A-Z])(?=.*[1-9])(?=.*[\W]).{8,16}$/.test(e.password) ? e.$turnPage(e, {
+                                                    url: "/ytsafe/homeView"
+                                                }) : m.a.alert({
+                                                    title: "系统提示",
+                                                    message: "您的账号密码过于简单,为了保证您的信息安全，请修改成更为安全的密码！"
+                                                }).then(function() {
+                                                    e.$turnPage(e, {
+                                                        url: "/ytsafe/more/changePassword?force=1"
+                                                    })
+                                                })
+                                            }
+                                        }, function(e) {
+                                            console.log("errorr")
+                                        })
+                                    } else
+                                        console.log(11),
+                                        m.a.alert({
+                                            title: "系统提示",
+                                            message: "获取登录权限失败！"
+                                        }).then(function() {
+                                            return !1
+                                        })
+                                }, function(t) {
+                                    m.a.alert({
+                                        title: "系统提示",
+                                        message: "获取登录权限失败！"
+                                    }).then(function() {
+                                        return e.loginFlag = !1,
+                                        !1
+                                    })
+                                })
+                            } else
+                                m.a.alert({
+                                    title: "系统提示",
+                                    message: "您的用户名或密码输入错误，如忘记密码请点击“忘记密码？”进行密码重置后再进行登录。"
+                                }).then(function() {
+                                    return e.loginFlag = !1,
+                                    !1
+                                })
+                        }, function(t) {
+                            e.loginFlag = !1,
+                            m.a.alert({
+                                title: "系统提示",
+                                message: "请求发生错误！"
+                            })
+                        })
+                    }
+                },
+                resetPassw: function() {
+                    this.$turnPage(this, {
+                        url: "/passwordReset",
+                        data: {
+                            fromLogin: !0
+                        }
+                    })
+                },
+                registCPN: function() {
+                    this.$turnPage(this, {
+                        url: "/registCPN"
+                    })
+                },
+                showPsw: function(e) {
+                    this.showFlag ? (this.showFlag = !1,
+                    e.currentTarget.previousElementSibling.setAttribute("type", "password")) : (this.showFlag = !0,
+                    e.currentTarget.previousElementSibling.setAttribute("type", "text"))
+                }
+            },
+            created: function() {
+                var e = this;
+                this.addDate(),
+                this.remind();
+                var t = document.cookie.split(";")
+                  , a = !0
+                  , s = !1
+                  , n = void 0;
+                try {
+                    for (var o, r = i()(t); !(a = (o = r.next()).done); a = !0) {
+                        var l = o.value;
+                        this.$cookie("name") && "name" == l.split("=")[0].trim() || (this.$cookie("pasw") && "pasw" == l.split("=")[0].trim() || this.$cookie(l.split("=")[0].trim(), null))
+                    }
+                } catch (e) {
+                    s = !0,
+                    n = e
+                } finally {
+                    try {
+                        !a && r.return && r.return()
+                    } finally {
+                        if (s)
+                            throw n
+                    }
+                }
+                this.$nextTick(function() {
+                    (e.$cookie("name") || e.$cookie("pasw")) && (e.remenber.push("rmbAll"),
+                    e.userName = Object(f.a)(Object(p.a)(e.$cookie("name"), "1", "2", "3")),
+                    e.password = Object(f.a)(Object(p.a)(e.$cookie("pasw"), "1", "2", "3"))),
+                    e.$cookie("autoLogin") && e.login()
+                })
+            }
+        }, b = {
+            render: function() {
+                var e = this
+                  , t = e.$createElement
+                  , a = e._self._c || t;
+                return a("div", {
+                    staticClass: "dom-full",
+                    staticStyle: {
+                        background: "#fff"
+                    }
+                }, [a("div", {
+                    staticClass: "top-half"
+                }), e._v(" "), a("van-overlay", {
+                    staticClass: "flexcenter",
+                    attrs: {
+                        show: e.loginFlag
+                    },
+                    on: {
+                        click: function(t) {
+                            e.loginFlag = !1
+                        }
+                    }
+                }, [a("van-loading", {
+                    attrs: {
+                        size: "34px"
+                    }
+                }, [e._v("正在登录...")])], 1), e._v(" "), a("div", {
+                    staticClass: "login-content"
+                }, [a("img", {
+                    attrs: {
+                        src: "/static/images/index/drawable-hdpi/logo.png",
+                        alt: ""
+                    }
+                }), e._v(" "), a("p", [e._v("企业安全助手")]), e._v(" "), a("div", {
+                    staticClass: "login-form mt20"
+                }, [a("form", {
+                    attrs: {
+                        action: ""
+                    }
+                }, [a("div", {
+                    staticClass: "theflex"
+                }, [a("van-icon", {
+                    attrs: {
+                        name: "/static/images/index/drawable-hdpi/yonghu_1.png",
+                        size: "20"
+                    }
+                }), e._v(" "), a("input", {
+                    directives: [{
+                        name: "model",
+                        rawName: "v-model",
+                        value: e.userName,
+                        expression: "userName"
+                    }],
+                    attrs: {
+                        type: "text",
+                        placeholder: "请输入用户名",
+                        autocomplete: "off"
+                    },
+                    domProps: {
+                        value: e.userName
+                    },
+                    on: {
+                        input: function(t) {
+                            t.target.composing || (e.userName = t.target.value)
+                        }
+                    }
+                })], 1), e._v(" "), a("div", {
+                    staticClass: "theflex",
+                    staticStyle: {
+                        "margin-top": "16px"
+                    }
+                }, [a("van-icon", {
+                    attrs: {
+                        name: "/static/images/index/drawable-hdpi/suo.png",
+                        size: "20"
+                    }
+                }), e._v(" "), a("input", {
+                    directives: [{
+                        name: "model",
+                        rawName: "v-model",
+                        value: e.password,
+                        expression: "password"
+                    }],
+                    attrs: {
+                        type: "password",
+                        placeholder: "请输入密码",
+                        autocomplete: "off"
+                    },
+                    domProps: {
+                        value: e.password
+                    },
+                    on: {
+                        input: function(t) {
+                            t.target.composing || (e.password = t.target.value)
+                        }
+                    }
+                }), e._v(" "), e.showFlag ? a("van-icon", {
+                    attrs: {
+                        name: "eye-o",
+                        size: "20",
+                        color: "rgba(255,255,255,0.8)"
+                    },
+                    on: {
+                        click: e.showPsw
+                    }
+                }) : a("van-icon", {
+                    attrs: {
+                        name: "closed-eye",
+                        size: "20",
+                        color: "rgba(255,255,255,0.8)"
+                    },
+                    on: {
+                        click: e.showPsw
+                    }
+                })], 1)]), e._v(" "), a("div", {
+                    staticClass: "flexbetween"
+                }, [a("div", [a("van-checkbox-group", {
+                    staticClass: "flexbetween remerberAll",
+                    attrs: {
+                        direction: "horizontal"
+                    },
+                    model: {
+                        value: e.remenber,
+                        callback: function(t) {
+                            e.remenber = t
+                        },
+                        expression: "remenber"
+                    }
+                }, [a("van-checkbox", {
+                    attrs: {
+                        name: "rmbAll",
+                        shape: "square"
+                    }
+                }, [e._v("记住用户名/密码")])], 1)], 1), e._v(" "), a("div", {
+                    staticClass: "flexbetween"
+                }, [a("p", {
+                    staticClass: "font12",
+                    staticStyle: {
+                        color: "#ffcc00",
+                        "line-height": "20px"
+                    },
+                    on: {
+                        click: e.resetPassw
+                    }
+                }, [e._v("忘记密码?")])])])]), e._v(" "), a("div", {
+                    staticClass: "login-btn mt10",
+                    on: {
+                        click: e.login
+                    }
+                }, [e._v("登录")]), e._v(" "), e.contain ? a("div", {
+                    staticClass: "remind"
+                }, [e._v("\n      提示：" + e._s(e.message) + "\n    ")]) : e._e()])], 1)
+            },
+            staticRenderFns: []
+        };
+        var x = a("VU/8")(w, b, !1, function(e) {
+            a("ENJ5")
+        }, "data-v-b5bd952a", null);
+        t.default = x.exports
+    }
+});
